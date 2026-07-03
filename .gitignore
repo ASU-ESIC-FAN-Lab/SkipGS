@@ -1,0 +1,10 @@
+tests/
+__pycache__/
+*.pyc
+build/
+dist/
+*.egg-info/
+# keep only the two headline examples in git
+examples/*
+!examples/integrate_gaussian_splatting.md
+!examples/integrate_fastgs.md

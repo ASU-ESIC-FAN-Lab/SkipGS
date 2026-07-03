@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skipgs"
+dynamic = ["version"]
+description = "Convergence-aware backward-skipping controller for 3D Gaussian Splatting fine-tuning."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+keywords = ["3d-gaussian-splatting", "3dgs", "gsplat", "training", "acceleration", "nerf"]
+authors = [{ name = "SkipGS authors" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+# Core has zero runtime dependencies -- it is pure-Python bookkeeping.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.dynamic]
+version = { attr = "skipgs.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["skipgs*"]
+
+[tool.setuptools.package-data]
+skipgs = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
