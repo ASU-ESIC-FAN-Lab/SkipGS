@@ -92,7 +92,12 @@ Porting to your trainer means making the same three decisions:
 
 Worked examples (validated on real training runs):
 [gaussian-splatting](examples/integrate_gaussian_splatting.md) ·
-[FastGS](examples/integrate_fastgs.md).
+[FastGS](examples/integrate_fastgs.md) ·
+[gsplat](examples/integrate_gsplat.md) ·
+[Taming 3DGS](examples/integrate_taming_3dgs.md) ·
+[Speedy-Splat](examples/integrate_speedy_splat.md) ·
+[LightGaussian](examples/integrate_lightgaussian.md) ·
+[GaussianSpa](examples/integrate_gaussianspa.md).
 
 ## API
 
