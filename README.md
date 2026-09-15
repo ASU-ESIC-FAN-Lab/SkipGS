@@ -46,6 +46,27 @@ calibrates a **minimum backward budget**: a floor on the fraction of real
 backwards, enforced throughout, so skipping can never starve optimization.
 No CUDA, no renderer or model changes, zero dependencies.
 
+## Training process visualization
+
+<div align="center">
+
+[![FastGS vs. FastGS + SkipGS on Mip-NeRF 360 garden: test view during training and test PSNR over time / iteration](docs/videos/garden_poster.jpg)](https://asu-esic-fan-lab.github.io/SkipGS/)
+
+**[▶ Watch the training timelapse](https://asu-esic-fan-lab.github.io/SkipGS/)** (garden, bicycle)
+
+</div>
+
+Same scene trained twice from scratch (0 → 30k) on identical GPUs — FastGS vs.
+FastGS + SkipGS — with a held-out view rendered as training runs and test PSNR
+plotted against training time and iteration. SkipGS acts only after
+densification ends (15k), so the two runs are identical until then and SkipGS
+finishes first.
+
+| Scene | Total time | Post-densification time | Test PSNR | Backward skipped |
+|-------|-----------:|------------------------:|----------:|-----------------:|
+| garden | 236.7 → 199.0 s (−15.9%) | 116.9 → 83.0 s (−29.0%) | 27.24 → 27.20 | 38.9% |
+| bicycle | 173.8 → 154.2 s (−11.3%) | 88.8 → 68.7 s (−22.7%) | 24.85 → 24.83 | 37.5% |
+
 ## Install
 
 ```bash

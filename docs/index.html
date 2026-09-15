@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SkipGS Training Timelapse</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f7f6f2;--panel:#ffffff;--ink:#1c1b18;--muted:#6b6961;--line:#e3e1d9;
+  --accent:#2f6fca;--accent-ink:#ffffff;--ours:#3987e5;--base:#d95926;--video-bg:#1a1a19;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161615;--panel:#1f1f1d;--ink:#f1efe8;--muted:#a9a69c;--line:#33332f;
+    --accent:#5a9cf0;--accent-ink:#0f172a;--ours:#5a9cf0;--base:#e8703f;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161615;--panel:#1f1f1d;--ink:#f1efe8;--muted:#a9a69c;--line:#33332f;
+  --accent:#5a9cf0;--accent-ink:#0f172a;--ours:#5a9cf0;--base:#e8703f;
+}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.55}
+main{max-width:1040px;margin:0 auto;padding:44px 20px 72px}
+header{display:grid;gap:10px;margin-bottom:26px}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:2rem;font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+.lead{max-width:68ch;color:var(--muted);margin:0}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:7px;background:var(--base)}
+.legend span.ours::before{background:var(--ours)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.tab{font:inherit;font-weight:500;text-transform:capitalize;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer}
+.tab:hover{border-color:var(--accent)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pane{display:none}.pane.active{display:block}
+video{width:100%;display:block;border-radius:10px;background:var(--video-bg)}
+.hint{font-size:13px;color:var(--muted);margin:10px 0 28px}
+h2{font-size:1.1rem;font-weight:600;margin:0 0 10px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+th:first-child,td:first-child{text-align:left;text-transform:capitalize;font-weight:500}
+tr:last-child td{border-bottom:0}
+.delta{color:var(--accent);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13px}
+.notes{max-width:68ch;color:var(--muted);font-size:14px;margin-top:22px}
+.notes li{margin-bottom:6px}
+a{color:var(--accent)}
+</style>
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="eyebrow">Training process visualization · FastGS backbone</div>
+  <h1>SkipGS Training Timelapse</h1>
+  <p class="lead">The same scene trained twice from scratch on identical GPUs, 0 to 30k iterations: plain FastGS, and FastGS with SkipGS skipping the backward pass on converged views. Left, a held-out test view rendered as training runs. Right, test-set PSNR over training time and over iteration. Playback is training wall-clock time at 8×; snapshot rendering is excluded from the timer.</p>
+  <div class="legend"><span>FastGS</span><span class="ours">FastGS + SkipGS</span></div>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab active" role="tab" data-scene="garden">garden</button>
+  <button class="tab" role="tab" data-scene="bicycle">bicycle</button>
+</div>
+<div class="pane active" data-scene="garden">
+  <video id="v-garden" poster="videos/garden_poster.jpg" controls muted playsinline loop autoplay preload="metadata"><source src="videos/garden.mp4" type="video/mp4"></video>
+</div>
+<div class="pane" data-scene="bicycle">
+  <video id="v-bicycle" poster="videos/bicycle_poster.jpg" controls muted playsinline loop preload="metadata"><source src="videos/bicycle.mp4" type="video/mp4"></video>
+</div>
+<p class="hint">Fullscreen the video to view better. SkipGS only acts after densification ends at 15k iterations, so both runs are identical until then; the dips every 3k iterations are FastGS's opacity resets.</p>
+
+<h2>What the two runs measured</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Scene</th><th>Total time, FastGS</th><th>Total time, +SkipGS</th><th>Post-densification time</th><th>Test PSNR</th><th>Backward skipped</th><th>Gaussians</th></tr></thead>
+<tbody>
+<tr><td>garden</td><td>236.7 s</td><td>199.0 s <span class="delta">−15.9%</span></td><td>116.9 → 83.0 s <span class="delta">−29.0%</span></td><td>27.24 → 27.20</td><td>38.9%</td><td>736K / 746K</td></tr>
+<tr><td>bicycle</td><td>173.8 s</td><td>154.2 s <span class="delta">−11.3%</span></td><td>88.8 → 68.7 s <span class="delta">−22.7%</span></td><td>24.85 → 24.83</td><td>37.5%</td><td>541K / 535K</td></tr>
+</tbody>
+</table>
+</div>
+<ul class="notes">
+  <li>Single run per configuration on one RTX 5000 Ada each; PSNR is the mean over all test views at the final snapshot, from the visualization hook rather than the paper's evaluation script.</li>
+  <li>Code: <a href="https://github.com/ASU-ESIC-FAN-Lab/SkipGS">github.com/ASU-ESIC-FAN-Lab/SkipGS</a> · SkipGS paper: <a href="https://arxiv.org/abs/2603.08997">arXiv 2603.08997</a> · FastGS: <a href="https://arxiv.org/abs/2511.04283">arXiv 2511.04283</a>.</li>
+</ul>
+</main>
+<script>
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  const sc=t.dataset.scene;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+  document.querySelectorAll('.pane').forEach(p=>{
+    const on=p.dataset.scene===sc;p.classList.toggle('active',on);
+    const v=p.querySelector('video');
+    if(on){v.currentTime=0;v.play().catch(()=>{});}else v.pause();
+  });
+}));
+</script>
+</body>
+</html>
