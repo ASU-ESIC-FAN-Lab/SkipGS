@@ -50,9 +50,9 @@ No CUDA, no renderer or model changes, zero dependencies.
 
 <div align="center">
 
-[![FastGS vs. FastGS + SkipGS on Mip-NeRF 360 garden: test view during training and test PSNR over time / iteration](docs/videos/garden_poster.jpg)](https://asu-esic-fan-lab.github.io/SkipGS/)
+[![FastGS vs. FastGS + SkipGS on Mip-NeRF 360 garden: test view during training and test PSNR over time / iteration (16× speed)](docs/videos/garden_timelapse.gif)](https://asu-esic-fan-lab.github.io/SkipGS/)
 
-**[▶ Watch the training timelapse](https://asu-esic-fan-lab.github.io/SkipGS/)** (garden, bicycle)
+**[▶ Full-resolution videos (garden, bicycle)](https://asu-esic-fan-lab.github.io/SkipGS/)**
 
 </div>
 
