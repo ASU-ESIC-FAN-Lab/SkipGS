@@ -17,19 +17,9 @@ Arizona State University
 
 <div align="center">
 
-<details open>
-<summary><b>garden</b> &nbsp;·&nbsp; FastGS vs. FastGS + SkipGS, 16× speed (click <b>bicycle</b> below to switch)</summary>
-<br>
-<a href="https://asu-esic-fan-lab.github.io/SkipGS/"><img src="docs/videos/garden_timelapse.gif" width="720" alt="garden: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom"></a>
-</details>
+<img src="docs/videos/garden_timelapse.gif" width="720" alt="garden: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom">
 
-<details>
-<summary><b>bicycle</b> &nbsp;·&nbsp; FastGS vs. FastGS + SkipGS, 16× speed</summary>
-<br>
-<a href="https://asu-esic-fan-lab.github.io/SkipGS/"><img src="docs/videos/bicycle_timelapse.gif" width="720" alt="bicycle: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom"></a>
-</details>
-
-**[▶ Full-resolution videos with scene tabs](https://asu-esic-fan-lab.github.io/SkipGS/)**
+<img src="docs/videos/bicycle_timelapse.gif" width="720" alt="bicycle: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom">
 
 </div>
 
