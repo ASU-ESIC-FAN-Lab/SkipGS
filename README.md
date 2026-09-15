@@ -13,6 +13,37 @@ Arizona State University
 
 </div>
 
+## Training process visualization
+
+<div align="center">
+
+<details open>
+<summary><b>garden</b> &nbsp;·&nbsp; FastGS vs. FastGS + SkipGS, 16× speed (click <b>bicycle</b> below to switch)</summary>
+<br>
+<a href="https://asu-esic-fan-lab.github.io/SkipGS/"><img src="docs/videos/garden_timelapse.gif" width="720" alt="garden: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom"></a>
+</details>
+
+<details>
+<summary><b>bicycle</b> &nbsp;·&nbsp; FastGS vs. FastGS + SkipGS, 16× speed</summary>
+<br>
+<a href="https://asu-esic-fan-lab.github.io/SkipGS/"><img src="docs/videos/bicycle_timelapse.gif" width="720" alt="bicycle: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom"></a>
+</details>
+
+**[▶ Full-resolution videos with scene tabs](https://asu-esic-fan-lab.github.io/SkipGS/)**
+
+</div>
+
+Same scene trained twice from scratch (0 → 30k) on identical GPUs — FastGS vs.
+FastGS + SkipGS — with a held-out view rendered as training runs and test PSNR
+plotted against training time and iteration. SkipGS acts only after
+densification ends (15k), so the two runs are identical until then and SkipGS
+finishes first.
+
+| Scene | Total time | Post-densification time | Test PSNR | Backward skipped |
+|-------|-----------:|------------------------:|----------:|-----------------:|
+| garden | 236.7 → 199.0 s (−15.9%) | 116.9 → 83.0 s (−29.0%) | 27.24 → 27.20 | 38.9% |
+| bicycle | 173.8 → 154.2 s (−11.3%) | 88.8 → 68.7 s (−22.7%) | 24.85 → 24.83 | 37.5% |
+
 SkipGS skips the backward pass on 3DGS training views that have already
 converged. After densification ends, the backward pass dominates iteration
 cost (~62%), yet many sampled views have near-plateaued losses and contribute
@@ -45,27 +76,6 @@ and optimizer step. A `warmup` window after densification seeds the EMAs and
 calibrates a **minimum backward budget**: a floor on the fraction of real
 backwards, enforced throughout, so skipping can never starve optimization.
 No CUDA, no renderer or model changes, zero dependencies.
-
-## Training process visualization
-
-<div align="center">
-
-[![FastGS vs. FastGS + SkipGS on Mip-NeRF 360 garden: test view during training and test PSNR over time / iteration (16× speed)](docs/videos/garden_timelapse.gif)](https://asu-esic-fan-lab.github.io/SkipGS/)
-
-**[▶ Full-resolution videos (garden, bicycle)](https://asu-esic-fan-lab.github.io/SkipGS/)**
-
-</div>
-
-Same scene trained twice from scratch (0 → 30k) on identical GPUs — FastGS vs.
-FastGS + SkipGS — with a held-out view rendered as training runs and test PSNR
-plotted against training time and iteration. SkipGS acts only after
-densification ends (15k), so the two runs are identical until then and SkipGS
-finishes first.
-
-| Scene | Total time | Post-densification time | Test PSNR | Backward skipped |
-|-------|-----------:|------------------------:|----------:|-----------------:|
-| garden | 236.7 → 199.0 s (−15.9%) | 116.9 → 83.0 s (−29.0%) | 27.24 → 27.20 | 38.9% |
-| bicycle | 173.8 → 154.2 s (−11.3%) | 88.8 → 68.7 s (−22.7%) | 24.85 → 24.83 | 37.5% |
 
 ## Install
 
