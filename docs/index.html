@@ -48,6 +48,15 @@ tr:last-child td{border-bottom:0}
 .notes{max-width:68ch;color:var(--muted);font-size:14px;margin-top:22px}
 .notes li{margin-bottom:6px}
 a{color:var(--accent)}
+.cmp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:10px}
+.cmp{position:relative;overflow:hidden;border-radius:10px;background:var(--video-bg);aspect-ratio:1280/829;cursor:ew-resize;user-select:none;touch-action:none}
+.cmp video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+.cmp .b{clip-path:inset(0 0 0 var(--x,50%))}
+.cmp .bar{position:absolute;top:0;bottom:0;left:var(--x,50%);width:2px;background:#fff;transform:translateX(-1px);pointer-events:none}
+.cmp .knob{position:absolute;top:50%;left:var(--x,50%);transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:#fff;color:#1a1a19;display:grid;place-items:center;font-size:18px;box-shadow:0 1px 6px rgba(0,0,0,.4);pointer-events:none}
+.cmp .lab{position:absolute;top:10px;padding:4px 10px;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;font-weight:500;font-size:15px;pointer-events:none}
+.cmp .lab.l{left:10px}.cmp .lab.r{right:10px}
+.cmp .cap{position:absolute;bottom:8px;left:10px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;color:#fff;background:rgba(0,0,0,.55);padding:2px 8px;border-radius:6px;pointer-events:none;text-transform:capitalize}
 </style>
 <style>body{margin:0}img{max-width:100%}</style>
 </head>
@@ -71,6 +80,26 @@ a{color:var(--accent)}
   <video id="v-bicycle" poster="videos/bicycle_poster.jpg" controls muted playsinline loop preload="metadata"><source src="videos/bicycle.mp4" type="video/mp4"></video>
 </div>
 <p class="hint">Fullscreen the video to view better. SkipGS only acts after densification ends at 15k iterations, so both runs are identical until then; the dips every 3k iterations are FastGS's opacity resets.</p>
+
+<h2>Tour over the optimized scenes</h2>
+<p class="lead" style="margin-bottom:14px">The two finished models from the runs above, rendered along the same camera orbit. Drag the divider: FastGS on the left, FastGS + SkipGS on the right.</p>
+<div class="cmp-grid">
+  <div class="cmp" data-scene="garden" style="aspect-ratio:1280/828">
+    <video class="a" src="tour/garden_fastgs.mp4" poster="tour/garden_fastgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
+    <video class="b" src="tour/garden_skipgs.mp4" poster="tour/garden_skipgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
+    <div class="bar"></div><div class="knob">⇔</div>
+    <span class="lab l">FastGS</span><span class="lab r">FastGS + SkipGS</span>
+    <span class="cap">garden</span>
+  </div>
+  <div class="cmp" data-scene="bicycle" style="aspect-ratio:1280/850">
+    <video class="a" src="tour/bicycle_fastgs.mp4" poster="tour/bicycle_fastgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
+    <video class="b" src="tour/bicycle_skipgs.mp4" poster="tour/bicycle_skipgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
+    <div class="bar"></div><div class="knob">⇔</div>
+    <span class="lab l">FastGS</span><span class="lab r">FastGS + SkipGS</span>
+    <span class="cap">bicycle</span>
+  </div>
+</div>
+<p class="hint">Both videos are frame-aligned (same path, 300 frames) and kept in sync while playing.</p>
 
 <h2>What the two runs measured</h2>
 <div class="tablewrap">
@@ -97,6 +126,21 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
     if(on){v.currentTime=0;v.play().catch(()=>{});}else v.pause();
   });
 }));
+
+// before/after slider: drag sets --x; keep the two clips in lock-step
+document.querySelectorAll('.cmp').forEach(c=>{
+  const a=c.querySelector('.a'), b=c.querySelector('.b');
+  const set=e=>{const r=c.getBoundingClientRect();const x=Math.min(Math.max((e.clientX-r.left)/r.width,0),1);c.style.setProperty('--x',(x*100).toFixed(2)+'%');};
+  let down=false;
+  c.addEventListener('pointerdown',e=>{down=true;c.setPointerCapture(e.pointerId);set(e);});
+  c.addEventListener('pointermove',e=>{if(down)set(e);});
+  c.addEventListener('pointerup',()=>{down=false;});c.addEventListener('pointercancel',()=>{down=false;});
+  const sync=()=>{if(Math.abs(a.currentTime-b.currentTime)>0.05)b.currentTime=a.currentTime;};
+  a.addEventListener('play',()=>{b.play().catch(()=>{});});a.addEventListener('pause',()=>b.pause());
+  setInterval(sync,250);
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){a.play().catch(()=>{});b.play().catch(()=>{});}else{a.pause();b.pause();}}),{threshold:.2});
+  io.observe(c);
+});
 </script>
 </body>
 </html>
