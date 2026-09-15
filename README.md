@@ -34,6 +34,16 @@ finishes first.
 | garden | 236.7 → 199.0 s (−15.9%) | 116.9 → 83.0 s (−29.0%) | 27.24 → 27.20 | 38.9% |
 | bicycle | 173.8 → 154.2 s (−11.3%) | 88.8 → 68.7 s (−22.7%) | 24.85 → 24.83 | 37.5% |
 
+**Tour over the optimized scenes.** The two finished models rendered along the
+same camera orbit; the divider sweeps between FastGS (left) and FastGS + SkipGS
+(right). An interactive, draggable version is in [`docs/index.html`](docs/index.html).
+
+<div align="center">
+
+<img src="docs/tour/tour_slider.gif" width="848" alt="garden and bicycle: FastGS (left of the divider) vs. FastGS + SkipGS (right) along the same camera path">
+
+</div>
+
 SkipGS skips the backward pass on 3DGS training views that have already
 converged. After densification ends, the backward pass dominates iteration
 cost (~62%), yet many sampled views have near-plateaued losses and contribute
