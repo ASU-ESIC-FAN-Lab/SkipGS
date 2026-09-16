@@ -83,24 +83,29 @@ a{color:var(--accent)}
 <p class="hint">Fullscreen the video to view better. SkipGS only acts after densification ends at 15k iterations, so the two FastGS runs are identical until then; the dips every 3k iterations are opacity resets.</p>
 
 <h2>Tour over the optimized scenes</h2>
-<p class="lead" style="margin-bottom:14px">The two finished models from the runs above, rendered along the same camera orbit. Drag the divider: FastGS on the left, FastGS + SkipGS on the right.</p>
+<p class="lead" style="margin-bottom:14px">The finished models from the runs above, rendered along the same camera orbit. Drag the divider: the chosen baseline on the left, FastGS + SkipGS on the right.</p>
+<div class="tabs" role="tablist" aria-label="left side of the slider">
+  <span class="eyebrow" style="align-self:center;margin-right:4px">Left side</span>
+  <button class="tab lefttab active" data-left="3dgs" data-label="3DGS">3DGS</button>
+  <button class="tab lefttab" data-left="fastgs" data-label="FastGS">FastGS</button>
+</div>
 <div class="cmp-grid">
   <div class="cmp" data-scene="garden" style="aspect-ratio:1280/828">
-    <video class="a" src="tour/garden_fastgs.mp4" poster="tour/garden_fastgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
+    <video class="a" src="tour/garden_3dgs.mp4" poster="tour/garden_3dgs_poster.jpg" data-src-3dgs="tour/garden_3dgs.mp4" data-src-fastgs="tour/garden_fastgs.mp4" muted loop playsinline autoplay preload="auto"></video>
     <video class="b" src="tour/garden_skipgs.mp4" poster="tour/garden_skipgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
     <div class="bar"></div><div class="knob">⇔</div>
-    <span class="lab l">FastGS</span><span class="lab r">FastGS + SkipGS</span>
+    <span class="lab l">3DGS</span><span class="lab r">FastGS + SkipGS</span>
     <span class="cap">garden</span>
   </div>
   <div class="cmp" data-scene="bicycle" style="aspect-ratio:1280/850">
-    <video class="a" src="tour/bicycle_fastgs.mp4" poster="tour/bicycle_fastgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
+    <video class="a" src="tour/bicycle_3dgs.mp4" poster="tour/bicycle_3dgs_poster.jpg" data-src-3dgs="tour/bicycle_3dgs.mp4" data-src-fastgs="tour/bicycle_fastgs.mp4" muted loop playsinline autoplay preload="auto"></video>
     <video class="b" src="tour/bicycle_skipgs.mp4" poster="tour/bicycle_skipgs_poster.jpg" muted loop playsinline autoplay preload="auto"></video>
     <div class="bar"></div><div class="knob">⇔</div>
-    <span class="lab l">FastGS</span><span class="lab r">FastGS + SkipGS</span>
+    <span class="lab l">3DGS</span><span class="lab r">FastGS + SkipGS</span>
     <span class="cap">bicycle</span>
   </div>
 </div>
-<p class="hint">Both videos are frame-aligned (same path, 300 frames) and kept in sync while playing.</p>
+<p class="hint">All clips are frame-aligned (same path, 300 frames) and kept in sync while playing. 3DGS here is the original implementation trained on the same 1600-px images.</p>
 
 <h2>What the three runs measured</h2>
 <div class="tablewrap">
@@ -144,9 +149,20 @@ document.querySelectorAll('.cmp').forEach(c=>{
   const sync=()=>{if(Math.abs(a.currentTime-b.currentTime)>0.05)b.currentTime=a.currentTime;};
   a.addEventListener('play',()=>{b.play().catch(()=>{});});a.addEventListener('pause',()=>b.pause());
   setInterval(sync,250);
+  c._syncNow=()=>{b.currentTime=a.currentTime;};
   const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){a.play().catch(()=>{});b.play().catch(()=>{});}else{a.pause();b.pause();}}),{threshold:.2});
   io.observe(c);
 });
+document.querySelectorAll('.lefttab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.lefttab').forEach(x=>x.classList.toggle('active',x===t));
+  document.querySelectorAll('.cmp').forEach(c=>{
+    const a=c.querySelector('.a'), b=c.querySelector('.b'), src=a.dataset['src'+t.dataset.left.charAt(0).toUpperCase()+t.dataset.left.slice(1)];
+    const tcur=b.currentTime;
+    a.src=src; a.load();
+    a.addEventListener('loadeddata',()=>{a.currentTime=tcur; a.play().catch(()=>{});},{once:true});
+    c.querySelector('.lab.l').textContent=t.dataset.label;
+  });
+}));
 </script>
 </body>
 </html>
