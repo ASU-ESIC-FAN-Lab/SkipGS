@@ -36,7 +36,7 @@ finishes first.
 
 **Tour over the optimized scenes.** The two finished models rendered along the
 same camera orbit; the divider sweeps between FastGS (left) and FastGS + SkipGS
-(right). An interactive, draggable version is in [`docs/index.html`](docs/index.html).
+(right). **[Drag it yourself on the interactive demo page →](https://raw.githack.com/ASU-ESIC-FAN-Lab/SkipGS/gh-pages/index.html)**
 
 <div align="center">
 
