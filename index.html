@@ -66,7 +66,7 @@ a{color:var(--accent)}
 <header>
   <div class="eyebrow">Training process visualization · FastGS backbone</div>
   <h1>SkipGS Training Timelapse</h1>
-  <p class="lead">The same scene trained three times from scratch on identical GPUs, 0 to 30k iterations: original 3DGS, FastGS, and FastGS with SkipGS skipping the backward pass on converged views. Left, a held-out test view rendered as training runs. Right, test-set PSNR over training time and over iteration. The video plays in training wall-clock time at 10× until both FastGS runs have finished, then speeds up to 80× for the rest of the 3DGS run (the current playback speed is shown in the plot title); snapshot rendering is excluded from the timer.</p>
+  <p class="lead">The same scene trained three times from scratch on identical GPUs, 0 to 30k iterations: original 3DGS, FastGS, and FastGS with SkipGS skipping the backward pass on converged views. Left, a held-out test view rendered as training runs, for 3DGS and for FastGS + SkipGS. Right, test-set PSNR over training time and over iteration for all three runs. The video plays in training wall-clock time at 10× until both FastGS runs have finished, then speeds up to 300× for the rest of the 3DGS run (the current playback speed is shown in the plot title); snapshot rendering is excluded from the timer.</p>
   <div class="legend"><span class="vanilla">3DGS</span><span>FastGS</span><span class="ours">FastGS + SkipGS</span></div>
 </header>
 
