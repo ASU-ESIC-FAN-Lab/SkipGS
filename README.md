@@ -36,11 +36,11 @@ SkipGS finishes first. Deltas are relative to 3DGS; all three use the same
 | Scene | Method | Training time | Post-densification time | Test PSNR | Gaussians |
 |-------|--------|--------------:|------------------------:|----------:|----------:|
 | garden | 3DGS | 2739.4 s | 1328.1 s | 27.40 | 4.20M |
-|  | + FastGS | 236.7 s (-91%) | 116.9 s (-91%) | 27.24 (-0.15) | 736K |
-|  | + SkipGS | 199.0 s (-93%) | 83.0 s (-94%) | 27.20 (-0.20) | 746K |
+|  | + FastGS | 236.7 s (-91.4%) | 116.9 s (-91.2%) | 27.24 (-0.16) | 736K |
+|  | + SkipGS | 199.0 s (-92.7%) | 83.0 s (-93.8%) | 27.20 (-0.20) | 746K |
 | bicycle | 3DGS | 2781.9 s | 1470.8 s | 25.15 | 4.76M |
-|  | + FastGS | 173.8 s (-94%) | 88.8 s (-94%) | 24.85 (-0.30) | 541K |
-|  | + SkipGS | 154.2 s (-94%) | 68.7 s (-95%) | 24.83 (-0.32) | 535K |
+|  | + FastGS | 173.8 s (-93.8%) | 88.8 s (-94.0%) | 24.85 (-0.30) | 541K |
+|  | + SkipGS | 154.2 s (-94.5%) | 68.7 s (-95.3%) | 24.83 (-0.32) | 535K |
 
 **Tour over the optimized scenes.** The two finished models rendered along the
 same camera orbit; the divider sweeps between FastGS (left) and FastGS + SkipGS
