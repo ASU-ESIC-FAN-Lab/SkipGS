@@ -17,17 +17,18 @@ Arizona State University
 
 <div align="center">
 
-<img src="docs/videos/garden_timelapse.gif" width="720" alt="garden: 3DGS, FastGS and FastGS + SkipGS test view during training (left) and test PSNR over time / iteration (right)">
+<img src="docs/videos/garden_timelapse.gif" width="720" alt="garden: 3DGS vs. FastGS + SkipGS test view during training (left) and test PSNR of all three runs over time / iteration (right)">
 
-<img src="docs/videos/bicycle_timelapse.gif" width="720" alt="bicycle: 3DGS, FastGS and FastGS + SkipGS test view during training (left) and test PSNR over time / iteration (right)">
+<img src="docs/videos/bicycle_timelapse.gif" width="720" alt="bicycle: 3DGS vs. FastGS + SkipGS test view during training (left) and test PSNR of all three runs over time / iteration (right)">
 
 </div>
 
 Same scene trained three times from scratch (0 → 30k) on identical GPUs —
-original 3DGS, FastGS, and FastGS + SkipGS — with a held-out view rendered as
-training runs and test PSNR plotted against training time and iteration.
-Playback is 10× until both FastGS runs finish, then 80× for the rest of the
-3DGS run (the current speed is shown in the plot title). SkipGS acts only after
+original 3DGS, FastGS, and FastGS + SkipGS. Left: a held-out view rendered as
+training runs (3DGS vs. FastGS + SkipGS). Right: test PSNR of all three runs
+against training time and iteration. Playback is 10× until both FastGS runs
+finish, then 300× for the rest of the 3DGS run (the current speed is shown in
+the plot title). SkipGS acts only after
 densification ends (15k), so the two FastGS runs are identical until then and
 SkipGS finishes first. Deltas are relative to 3DGS; all three use the same
 1600-px images and test split (FastGS's protocol).
