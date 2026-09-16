@@ -8,17 +8,17 @@
 <style>
 :root{
   --bg:#f7f6f2;--panel:#ffffff;--ink:#1c1b18;--muted:#6b6961;--line:#e3e1d9;
-  --accent:#2f6fca;--accent-ink:#ffffff;--ours:#3987e5;--base:#d95926;--video-bg:#1a1a19;
+  --accent:#2f6fca;--accent-ink:#ffffff;--ours:#3987e5;--base:#d95926;--vanilla:#7c6fe0;--video-bg:#1a1a19;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#161615;--panel:#1f1f1d;--ink:#f1efe8;--muted:#a9a69c;--line:#33332f;
-    --accent:#5a9cf0;--accent-ink:#0f172a;--ours:#5a9cf0;--base:#e8703f;
+    --accent:#5a9cf0;--accent-ink:#0f172a;--ours:#5a9cf0;--base:#e8703f;--vanilla:#9085e9;
   }
 }
 :root[data-theme="dark"]{
   --bg:#161615;--panel:#1f1f1d;--ink:#f1efe8;--muted:#a9a69c;--line:#33332f;
-  --accent:#5a9cf0;--accent-ink:#0f172a;--ours:#5a9cf0;--base:#e8703f;
+  --accent:#5a9cf0;--accent-ink:#0f172a;--ours:#5a9cf0;--base:#e8703f;--vanilla:#9085e9;
 }
 body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.55}
 main{max-width:1040px;margin:0 auto;padding:44px 20px 72px}
@@ -29,6 +29,7 @@ h1{font-size:2rem;font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
 .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
 .legend span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:7px;background:var(--base)}
 .legend span.ours::before{background:var(--ours)}
+.legend span.vanilla::before{background:var(--vanilla)}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
 .tab{font:inherit;font-weight:500;text-transform:capitalize;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer}
 .tab:hover{border-color:var(--accent)}
@@ -65,8 +66,8 @@ a{color:var(--accent)}
 <header>
   <div class="eyebrow">Training process visualization · FastGS backbone</div>
   <h1>SkipGS Training Timelapse</h1>
-  <p class="lead">The same scene trained twice from scratch on identical GPUs, 0 to 30k iterations: plain FastGS, and FastGS with SkipGS skipping the backward pass on converged views. Left, a held-out test view rendered as training runs. Right, test-set PSNR over training time and over iteration. Playback is training wall-clock time at 8×; snapshot rendering is excluded from the timer.</p>
-  <div class="legend"><span>FastGS</span><span class="ours">FastGS + SkipGS</span></div>
+  <p class="lead">The same scene trained three times from scratch on identical GPUs, 0 to 30k iterations: original 3DGS, FastGS, and FastGS with SkipGS skipping the backward pass on converged views. Left, a held-out test view rendered as training runs. Right, test-set PSNR over training time and over iteration. The video plays in training wall-clock time at 10× until both FastGS runs have finished, then speeds up to 80× for the rest of the 3DGS run (the current playback speed is shown in the plot title); snapshot rendering is excluded from the timer.</p>
+  <div class="legend"><span class="vanilla">3DGS</span><span>FastGS</span><span class="ours">FastGS + SkipGS</span></div>
 </header>
 
 <div class="tabs" role="tablist">
@@ -79,7 +80,7 @@ a{color:var(--accent)}
 <div class="pane" data-scene="bicycle">
   <video id="v-bicycle" poster="videos/bicycle_poster.jpg" controls muted playsinline loop preload="metadata"><source src="videos/bicycle.mp4" type="video/mp4"></video>
 </div>
-<p class="hint">Fullscreen the video to view better. SkipGS only acts after densification ends at 15k iterations, so both runs are identical until then; the dips every 3k iterations are FastGS's opacity resets.</p>
+<p class="hint">Fullscreen the video to view better. SkipGS only acts after densification ends at 15k iterations, so the two FastGS runs are identical until then; the dips every 3k iterations are opacity resets.</p>
 
 <h2>Tour over the optimized scenes</h2>
 <p class="lead" style="margin-bottom:14px">The two finished models from the runs above, rendered along the same camera orbit. Drag the divider: FastGS on the left, FastGS + SkipGS on the right.</p>
@@ -101,19 +102,24 @@ a{color:var(--accent)}
 </div>
 <p class="hint">Both videos are frame-aligned (same path, 300 frames) and kept in sync while playing.</p>
 
-<h2>What the two runs measured</h2>
+<h2>What the three runs measured</h2>
 <div class="tablewrap">
 <table>
-<thead><tr><th>Scene</th><th>Total time, FastGS</th><th>Total time, +SkipGS</th><th>Post-densification time</th><th>Test PSNR</th><th>Backward skipped</th><th>Gaussians</th></tr></thead>
+<thead><tr><th>Scene</th><th>Method</th><th>Training time</th><th>Post-densification time</th><th>Test PSNR</th><th>Gaussians</th></tr></thead>
 <tbody>
-<tr><td>garden</td><td>236.7 s</td><td>199.0 s <span class="delta">−15.9%</span></td><td>116.9 → 83.0 s <span class="delta">−29.0%</span></td><td>27.24 → 27.20</td><td>38.9%</td><td>736K / 746K</td></tr>
-<tr><td>bicycle</td><td>173.8 s</td><td>154.2 s <span class="delta">−11.3%</span></td><td>88.8 → 68.7 s <span class="delta">−22.7%</span></td><td>24.85 → 24.83</td><td>37.5%</td><td>541K / 535K</td></tr>
+<tr><td>garden</td><td>3DGS</td><td>2739.4 s<span class="delta"></span></td><td>1328.1 s<span class="delta"></span></td><td>27.40<span class="delta"></span></td><td>4.20M</td></tr>
+<tr><td></td><td>+ FastGS</td><td>236.7 s<span class="delta"> (-91%)</span></td><td>116.9 s<span class="delta"> (-91%)</span></td><td>27.24<span class="delta"> (-0.15)</span></td><td>736K</td></tr>
+<tr><td></td><td>+ SkipGS</td><td>199.0 s<span class="delta"> (-93%)</span></td><td>83.0 s<span class="delta"> (-94%)</span></td><td>27.20<span class="delta"> (-0.20)</span></td><td>746K</td></tr>
+<tr><td>bicycle</td><td>3DGS</td><td>2781.9 s<span class="delta"></span></td><td>1470.8 s<span class="delta"></span></td><td>25.15<span class="delta"></span></td><td>4.76M</td></tr>
+<tr><td></td><td>+ FastGS</td><td>173.8 s<span class="delta"> (-94%)</span></td><td>88.8 s<span class="delta"> (-94%)</span></td><td>24.85<span class="delta"> (-0.30)</span></td><td>541K</td></tr>
+<tr><td></td><td>+ SkipGS</td><td>154.2 s<span class="delta"> (-94%)</span></td><td>68.7 s<span class="delta"> (-95%)</span></td><td>24.83<span class="delta"> (-0.32)</span></td><td>535K</td></tr>
 </tbody>
 </table>
 </div>
 <ul class="notes">
-  <li>Single run per configuration on one RTX 5000 Ada each; PSNR is the mean over all test views at the final snapshot, from the visualization hook rather than the paper's evaluation script.</li>
-  <li>Code: <a href="https://github.com/ASU-ESIC-FAN-Lab/SkipGS">github.com/ASU-ESIC-FAN-Lab/SkipGS</a> · SkipGS paper: <a href="https://arxiv.org/abs/2603.08997">arXiv 2603.08997</a> · FastGS: <a href="https://arxiv.org/abs/2511.04283">arXiv 2511.04283</a>.</li>
+  <li>Single run per configuration on one RTX 5000 Ada each; PSNR is the mean over all test views at the final snapshot, from the visualization hook rather than each method's evaluation script. Percentages and PSNR deltas are relative to 3DGS.</li>
+  <li>All three runs use the same 1600-pixel-wide images and test split as FastGS's protocol; the standard 3DGS protocol trains these outdoor scenes at 1/4 resolution, so 3DGS's time here is higher than in its paper.</li>
+  <li>3DGS: <a href="https://github.com/graphdeco-inria/gaussian-splatting">graphdeco-inria/gaussian-splatting</a>. FastGS: <a href="https://arxiv.org/abs/2511.04283">arXiv 2511.04283</a>. SkipGS: <a href="https://arxiv.org/abs/2603.08997">arXiv 2603.08997</a> · code <a href="https://github.com/ASU-ESIC-FAN-Lab/SkipGS">github.com/ASU-ESIC-FAN-Lab/SkipGS</a>.</li>
 </ul>
 </main>
 <script>

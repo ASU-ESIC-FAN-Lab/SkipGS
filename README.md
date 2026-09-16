@@ -17,22 +17,29 @@ Arizona State University
 
 <div align="center">
 
-<img src="docs/videos/garden_timelapse.gif" width="720" alt="garden: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom">
+<img src="docs/videos/garden_timelapse.gif" width="720" alt="garden: 3DGS, FastGS and FastGS + SkipGS test view during training (left) and test PSNR over time / iteration (right)">
 
-<img src="docs/videos/bicycle_timelapse.gif" width="720" alt="bicycle: test view during training (left) and test PSNR over time / iteration (right), FastGS top, FastGS + SkipGS bottom">
+<img src="docs/videos/bicycle_timelapse.gif" width="720" alt="bicycle: 3DGS, FastGS and FastGS + SkipGS test view during training (left) and test PSNR over time / iteration (right)">
 
 </div>
 
-Same scene trained twice from scratch (0 → 30k) on identical GPUs — FastGS vs.
-FastGS + SkipGS — with a held-out view rendered as training runs and test PSNR
-plotted against training time and iteration. SkipGS acts only after
-densification ends (15k), so the two runs are identical until then and SkipGS
-finishes first.
+Same scene trained three times from scratch (0 → 30k) on identical GPUs —
+original 3DGS, FastGS, and FastGS + SkipGS — with a held-out view rendered as
+training runs and test PSNR plotted against training time and iteration.
+Playback is 10× until both FastGS runs finish, then 80× for the rest of the
+3DGS run (the current speed is shown in the plot title). SkipGS acts only after
+densification ends (15k), so the two FastGS runs are identical until then and
+SkipGS finishes first. Deltas are relative to 3DGS; all three use the same
+1600-px images and test split (FastGS's protocol).
 
-| Scene | Total time | Post-densification time | Test PSNR | Backward skipped |
-|-------|-----------:|------------------------:|----------:|-----------------:|
-| garden | 236.7 → 199.0 s (−15.9%) | 116.9 → 83.0 s (−29.0%) | 27.24 → 27.20 | 38.9% |
-| bicycle | 173.8 → 154.2 s (−11.3%) | 88.8 → 68.7 s (−22.7%) | 24.85 → 24.83 | 37.5% |
+| Scene | Method | Training time | Post-densification time | Test PSNR | Gaussians |
+|-------|--------|--------------:|------------------------:|----------:|----------:|
+| garden | 3DGS | 2739.4 s | 1328.1 s | 27.40 | 4.20M |
+|  | + FastGS | 236.7 s (-91%) | 116.9 s (-91%) | 27.24 (-0.15) | 736K |
+|  | + SkipGS | 199.0 s (-93%) | 83.0 s (-94%) | 27.20 (-0.20) | 746K |
+| bicycle | 3DGS | 2781.9 s | 1470.8 s | 25.15 | 4.76M |
+|  | + FastGS | 173.8 s (-94%) | 88.8 s (-94%) | 24.85 (-0.30) | 541K |
+|  | + SkipGS | 154.2 s (-94%) | 68.7 s (-95%) | 24.83 (-0.32) | 535K |
 
 **Tour over the optimized scenes.** The two finished models rendered along the
 same camera orbit; the divider sweeps between FastGS (left) and FastGS + SkipGS
