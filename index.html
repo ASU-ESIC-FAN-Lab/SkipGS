@@ -38,6 +38,8 @@ h1{font-size:2rem;font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
 .pane{display:none}.pane.active{display:block}
 .wriva-pane{display:none;margin-bottom:12px}.wriva-pane.active{display:block}
 .wriva-video{width:100%;display:block;border-radius:10px;background:var(--video-bg)}
+.wriva-final-pane{display:none;margin-bottom:12px}.wriva-final-pane.active{display:block}
+.wriva-final-img{width:100%;display:block;border-radius:10px;background:var(--video-bg)}
 video{width:100%;display:block;border-radius:10px;background:var(--video-bg)}
 .hint{font-size:13px;color:var(--muted);margin:10px 0 28px}
 h2{font-size:1.1rem;font-weight:600;margin:0 0 10px}
@@ -143,6 +145,39 @@ a{color:var(--accent)}
 </div>
 <p class="hint">Fullscreen the video to view better. PSNR is measured on a single fixed test view (index 0), sampled every 500 iters; the fast-phase speed is chosen per scene to keep each video ~30 s. Snapshot rendering is excluded from the reported training time.</p>
 
+<h2>WRIVA final renders (iter 23k, post-difix)</h2>
+<p class="lead" style="margin-bottom:14px">Same held-out test view rendered by each finished model, four-column side by side: Ground Truth, 3DGS Vanilla, +FastGS, +FastGS + SkipGS. Renders shown are the post-difix cleanup outputs (i.e. what the WRIVA-Phase-2 pipeline actually delivers per scene); config-to-config visual differences are minor across all seven scenes.</p>
+<div class="tabs" role="tablist" aria-label="WRIVA final-render scene">
+  <button class="tab wriva-final-tab active" data-wrivafinal="t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor">Cathedral</button>
+  <button class="tab wriva-final-tab" data-wrivafinal="t01_v18_s03_r02_ImageDensity_S06_low_contrast">low_contrast</button>
+  <button class="tab wriva-final-tab" data-wrivafinal="t02_v03_s02_r02_CameraModels_A05">CameraModels_A05</button>
+  <button class="tab wriva-final-tab" data-wrivafinal="t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug">CameraModels_A01</button>
+  <button class="tab wriva-final-tab" data-wrivafinal="t07_v09_s05_r01_EnvironmentalVariation_A03_Season_MSE_Library">Season_MSE_Library</button>
+  <button class="tab wriva-final-tab" data-wrivafinal="t10_v05_s00_r03_TransientMitigation_S05_TransientSize">TransientSize</button>
+  <button class="tab wriva-final-tab" data-wrivafinal="t13_v02_s03_r02_ULTRRA_test_A09">ULTRRA_A09</button>
+</div>
+<div class="wriva-final-pane active" data-wrivafinal="t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor">
+  <img class="wriva-final-img" src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/final/t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor.png" alt="Cathedral final renders">
+</div>
+<div class="wriva-final-pane" data-wrivafinal="t01_v18_s03_r02_ImageDensity_S06_low_contrast">
+  <img class="wriva-final-img" src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/final/t01_v18_s03_r02_ImageDensity_S06_low_contrast.png" alt="low_contrast final renders">
+</div>
+<div class="wriva-final-pane" data-wrivafinal="t02_v03_s02_r02_CameraModels_A05">
+  <img class="wriva-final-img" src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/final/t02_v03_s02_r02_CameraModels_A05.png" alt="CameraModels_A05 final renders">
+</div>
+<div class="wriva-final-pane" data-wrivafinal="t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug">
+  <img class="wriva-final-img" src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/final/t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug.png" alt="CameraModels_A01 final renders">
+</div>
+<div class="wriva-final-pane" data-wrivafinal="t07_v09_s05_r01_EnvironmentalVariation_A03_Season_MSE_Library">
+  <img class="wriva-final-img" src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/final/t07_v09_s05_r01_EnvironmentalVariation_A03_Season_MSE_Library.png" alt="Season_MSE_Library final renders">
+</div>
+<div class="wriva-final-pane" data-wrivafinal="t10_v05_s00_r03_TransientMitigation_S05_TransientSize">
+  <img class="wriva-final-img" src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/final/t10_v05_s00_r03_TransientMitigation_S05_TransientSize.png" alt="TransientSize final renders">
+</div>
+<div class="wriva-final-pane" data-wrivafinal="t13_v02_s03_r02_ULTRRA_test_A09">
+  <img class="wriva-final-img" src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/final/t13_v02_s03_r02_ULTRRA_test_A09.png" alt="ULTRRA_A09 final renders">
+</div>
+
 <h2>What the three runs measured</h2>
 <div class="tablewrap">
 <table>
@@ -186,6 +221,15 @@ document.querySelectorAll('.wriva-tab').forEach(t=>t.addEventListener('click',()
     const on=p.dataset.wriva===sc;p.classList.toggle('active',on);
     const v=p.querySelector('video');
     if(v){if(on){v.currentTime=0;v.play().catch(()=>{});}else v.pause();}
+  });
+}));
+
+// WRIVA final-render tabs
+document.querySelectorAll('.wriva-final-tab').forEach(t=>t.addEventListener('click',()=>{
+  const sc=t.dataset.wrivafinal;
+  document.querySelectorAll('.wriva-final-tab').forEach(x=>x.classList.toggle('active',x===t));
+  document.querySelectorAll('.wriva-final-pane').forEach(p=>{
+    p.classList.toggle('active', p.dataset.wrivafinal===sc);
   });
 }));
 
