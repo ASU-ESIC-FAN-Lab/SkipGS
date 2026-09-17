@@ -36,6 +36,8 @@ h1{font-size:2rem;font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
 .tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .pane{display:none}.pane.active{display:block}
+.wriva-pane{display:none;margin-bottom:12px}.wriva-pane.active{display:block}
+.wriva-video{width:100%;display:block;border-radius:10px;background:var(--video-bg)}
 video{width:100%;display:block;border-radius:10px;background:var(--video-bg)}
 .hint{font-size:13px;color:var(--muted);margin:10px 0 28px}
 h2{font-size:1.1rem;font-weight:600;margin:0 0 10px}
@@ -107,6 +109,36 @@ a{color:var(--accent)}
 </div>
 <p class="hint">All clips are frame-aligned (same path, 300 frames) and kept in sync while playing. 3DGS here is the original implementation trained on the same 1600-px images.</p>
 
+<h2>WRIVA multi-site: held-out test-view config comparison</h2>
+<p class="lead" style="margin-bottom:14px">Same three-way comparison deployed on JHU's WRIVA-Phase-2 pipeline (24-scene test set, per-scene 23k iterations, LoD-anchor Gaussian model). Each loop shows one held-out test view rendered by the final model of each configuration; scenes span outdoor architecture, camera-model challenges, environmental variation, transient objects, and dataset perturbations. FastGS + SkipGS keeps the pattern: <strong>~-52% end-to-end training time vs. vanilla 3DGS at matched final render quality</strong>.</p>
+<div class="tabs" role="tablist" aria-label="WRIVA scene">
+  <button class="tab wriva-tab active" data-wriva="t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor">Cathedral</button>
+  <button class="tab wriva-tab" data-wriva="t01_v18_s03_r02_ImageDensity_S06_low_contrast">low_contrast</button>
+  <button class="tab wriva-tab" data-wriva="t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug">CameraModels_A01</button>
+  <button class="tab wriva-tab" data-wriva="t07_v09_s05_r01_EnvironmentalVariation_A03_Season_MSE_Library">Season_MSE_Library</button>
+  <button class="tab wriva-tab" data-wriva="t10_v05_s00_r03_TransientMitigation_S05_TransientSize">TransientSize</button>
+  <button class="tab wriva-tab" data-wriva="t13_v02_s03_r02_ULTRRA_test_A09">ULTRRA_A09</button>
+</div>
+<div class="wriva-pane active" data-wriva="t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor">
+  <video class="wriva-video" muted playsinline loop autoplay preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor.mp4" type="video/mp4"></video>
+</div>
+<div class="wriva-pane" data-wriva="t01_v18_s03_r02_ImageDensity_S06_low_contrast">
+  <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t01_v18_s03_r02_ImageDensity_S06_low_contrast.mp4" type="video/mp4"></video>
+</div>
+<div class="wriva-pane" data-wriva="t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug">
+  <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug.mp4" type="video/mp4"></video>
+</div>
+<div class="wriva-pane" data-wriva="t07_v09_s05_r01_EnvironmentalVariation_A03_Season_MSE_Library">
+  <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t07_v09_s05_r01_EnvironmentalVariation_A03_Season_MSE_Library.mp4" type="video/mp4"></video>
+</div>
+<div class="wriva-pane" data-wriva="t10_v05_s00_r03_TransientMitigation_S05_TransientSize">
+  <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t10_v05_s00_r03_TransientMitigation_S05_TransientSize.mp4" type="video/mp4"></video>
+</div>
+<div class="wriva-pane" data-wriva="t13_v02_s03_r02_ULTRRA_test_A09">
+  <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t13_v02_s03_r02_ULTRRA_test_A09.mp4" type="video/mp4"></video>
+</div>
+<p class="hint">Each 6-second loop steps through the same test view rendered by Ground Truth → 3DGS Vanilla → +FastGS → +FastGS+SkipGS (1.5s each). Config-to-config visual differences are minor — the ~52% speedup does not degrade perceptual quality on WRIVA either.</p>
+
 <h2>What the three runs measured</h2>
 <div class="tablewrap">
 <table>
@@ -130,11 +162,26 @@ a{color:var(--accent)}
 <script>
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   const sc=t.dataset.scene;
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+  if(!sc) return;  // skip lefttab and wriva-tab (they have their own handlers)
+  document.querySelectorAll('.tab').forEach(x=>{
+    if(!x.dataset.scene) return;
+    x.classList.toggle('active',x===t);
+  });
   document.querySelectorAll('.pane').forEach(p=>{
     const on=p.dataset.scene===sc;p.classList.toggle('active',on);
     const v=p.querySelector('video');
     if(on){v.currentTime=0;v.play().catch(()=>{});}else v.pause();
+  });
+}));
+
+// WRIVA scene tabs: switch which wriva-pane is active
+document.querySelectorAll('.wriva-tab').forEach(t=>t.addEventListener('click',()=>{
+  const sc=t.dataset.wriva;
+  document.querySelectorAll('.wriva-tab').forEach(x=>x.classList.toggle('active',x===t));
+  document.querySelectorAll('.wriva-pane').forEach(p=>{
+    const on=p.dataset.wriva===sc;p.classList.toggle('active',on);
+    const v=p.querySelector('video');
+    if(v){if(on){v.currentTime=0;v.play().catch(()=>{});}else v.pause();}
   });
 }));
 
