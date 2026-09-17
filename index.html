@@ -109,11 +109,12 @@ a{color:var(--accent)}
 </div>
 <p class="hint">All clips are frame-aligned (same path, 300 frames) and kept in sync while playing. 3DGS here is the original implementation trained on the same 1600-px images.</p>
 
-<h2>WRIVA multi-site: held-out test-view config comparison</h2>
-<p class="lead" style="margin-bottom:14px">Same three-way comparison deployed on JHU's WRIVA-Phase-2 pipeline (24-scene test set, per-scene 23k iterations, LoD-anchor Gaussian model). Each loop shows one held-out test view rendered by the final model of each configuration; scenes span outdoor architecture, camera-model challenges, environmental variation, transient objects, and dataset perturbations. FastGS + SkipGS keeps the pattern: <strong>~-52% end-to-end training time vs. vanilla 3DGS at matched final render quality</strong>.</p>
+<h2>WRIVA multi-site training timelapse</h2>
+<p class="lead" style="margin-bottom:14px">Same three-way comparison deployed on JHU's WRIVA-Phase-2 pipeline (per-scene 23k iterations, LoD-anchor Gaussian model on top of the FastGS branch). Each scene trained three times from scratch on identical GPUs: 3DGS vanilla, +FastGS, +FastGS+SkipGS. Left, a held-out test view rendered as training runs (3DGS top, +FastGS+SkipGS bottom). Right, test PSNR of all three runs over training time and iteration. Snapshot every 500 iters; playback is a per-scene fast phase (both FastGS runs playing) then a 30× slower tail for the rest of the 3DGS run (current speed shown in the top plot title). SkipGS acts only after densification ends (15k), so the two FastGS runs are near-identical until then. Scenes span outdoor architecture, camera-model challenges, environmental variation, transient objects, and dataset perturbations. FastGS + SkipGS keeps the pattern: <strong>~-52% end-to-end training time vs. vanilla 3DGS at matched final render quality</strong>.</p>
 <div class="tabs" role="tablist" aria-label="WRIVA scene">
   <button class="tab wriva-tab active" data-wriva="t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor">Cathedral</button>
   <button class="tab wriva-tab" data-wriva="t01_v18_s03_r02_ImageDensity_S06_low_contrast">low_contrast</button>
+  <button class="tab wriva-tab" data-wriva="t02_v03_s02_r02_CameraModels_A05">CameraModels_A05</button>
   <button class="tab wriva-tab" data-wriva="t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug">CameraModels_A01</button>
   <button class="tab wriva-tab" data-wriva="t07_v09_s05_r01_EnvironmentalVariation_A03_Season_MSE_Library">Season_MSE_Library</button>
   <button class="tab wriva-tab" data-wriva="t10_v05_s00_r03_TransientMitigation_S05_TransientSize">TransientSize</button>
@@ -124,6 +125,9 @@ a{color:var(--accent)}
 </div>
 <div class="wriva-pane" data-wriva="t01_v18_s03_r02_ImageDensity_S06_low_contrast">
   <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t01_v18_s03_r02_ImageDensity_S06_low_contrast.mp4" type="video/mp4"></video>
+</div>
+<div class="wriva-pane" data-wriva="t02_v03_s02_r02_CameraModels_A05">
+  <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t02_v03_s02_r02_CameraModels_A05.mp4" type="video/mp4"></video>
 </div>
 <div class="wriva-pane" data-wriva="t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug">
   <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t02_v05_s00_r02_CameraModels_A01_new_intrinsic_aug.mp4" type="video/mp4"></video>
@@ -137,7 +141,7 @@ a{color:var(--accent)}
 <div class="wriva-pane" data-wriva="t13_v02_s03_r02_ULTRRA_test_A09">
   <video class="wriva-video" muted playsinline loop preload="metadata" controls><source src="https://cdn.jsdelivr.net/gh/ASU-ESIC-FAN-Lab/SkipGS@gh-pages/videos/wriva/t13_v02_s03_r02_ULTRRA_test_A09.mp4" type="video/mp4"></video>
 </div>
-<p class="hint">Each 6-second loop steps through the same test view rendered by Ground Truth → 3DGS Vanilla → +FastGS → +FastGS+SkipGS (1.5s each). Config-to-config visual differences are minor — the ~52% speedup does not degrade perceptual quality on WRIVA either.</p>
+<p class="hint">Fullscreen the video to view better. PSNR is measured on a single fixed test view (index 0), sampled every 500 iters; the fast-phase speed is chosen per scene to keep each video ~30 s. Snapshot rendering is excluded from the reported training time.</p>
 
 <h2>What the three runs measured</h2>
 <div class="tablewrap">
