@@ -70,6 +70,25 @@ additive speedups.
 
 </div>
 
+## Beyond Mip-NeRF: WRIVA multi-site reconstruction
+
+Deploying the same three-way comparison on JHU's WRIVA-Phase-2 large-scale
+multi-site 3DGS pipeline (24-scene test set, per-scene 23k iterations,
+LoD-anchor Gaussian model), FastGS + SkipGS keeps the pattern: **~-52% end-to-end
+training time vs. vanilla 3DGS with matched final render quality**.
+
+<div align="center">
+
+<img src="docs/wriva_comparison.png" width="960" alt="WRIVA test-view renders: Ground Truth vs. 3DGS Vanilla vs. +FastGS vs. +FastGS+SkipGS on 4 representative scenes">
+
+</div>
+
+Four representative held-out test views: GT (leftmost column) vs. the final render
+from each config trained from scratch. Scenes span outdoor architecture
+(Cathedral), water/reflective surfaces (M09), PTZ camera geometry (TrailerPark),
+and injected artifacts (M07). Config-to-config visual differences are minor —
+the ~52% speedup does not degrade perceptual quality on WRIVA either.
+
 ## How it works
 
 <div align="center">
