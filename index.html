@@ -145,8 +145,8 @@ a{color:var(--accent)}
 </div>
 <p class="hint">Fullscreen the video to view better. PSNR is measured on a single fixed test view (index 0), sampled every 500 iters; the fast-phase speed is chosen per scene to keep each video ~30 s. Snapshot rendering is excluded from the reported training time.</p>
 
-<h2>WRIVA final renders (iter 23k, post-difix)</h2>
-<p class="lead" style="margin-bottom:14px">Same held-out test view rendered by each finished model, four-column side by side: Ground Truth, 3DGS Vanilla, +FastGS, +FastGS + SkipGS. Renders shown are the post-difix cleanup outputs (i.e. what the WRIVA-Phase-2 pipeline actually delivers per scene); config-to-config visual differences are minor across all seven scenes.</p>
+<h2>WRIVA final renders (iter 23k, raw model output — no diffusion cleanup)</h2>
+<p class="lead" style="margin-bottom:14px">Same held-out test view rendered by each finished model at iteration 23000, four-column side by side: Ground Truth, 3DGS Vanilla, +FastGS, +FastGS + SkipGS. These are the raw Gaussian-splat outputs (WRIVA pipeline's <code>rendered_images_beforeDifixCleanup</code> — no diffusion / difix cleanup applied), so all three configs share the same visual fidelity ceiling; the point is that FastGS and SkipGS reach it in about half the training time without extra degradation.</p>
 <div class="tabs" role="tablist" aria-label="WRIVA final-render scene">
   <button class="tab wriva-final-tab active" data-wrivafinal="t01_v20_s03_r01_ImageDensity_S07_Cathedral_Outdoor">Cathedral</button>
   <button class="tab wriva-final-tab" data-wrivafinal="t01_v18_s03_r02_ImageDensity_S06_low_contrast">low_contrast</button>
