@@ -73,21 +73,26 @@ additive speedups.
 ## Beyond Mip-NeRF: WRIVA multi-site reconstruction
 
 Deploying the same three-way comparison on JHU's WRIVA-Phase-2 large-scale
-multi-site 3DGS pipeline (24-scene test set, per-scene 23k iterations,
-LoD-anchor Gaussian model), FastGS + SkipGS keeps the pattern: **~-52% end-to-end
-training time vs. vanilla 3DGS with matched final render quality**.
+multi-site pipeline. **The WRIVA base model is Octree-GS (Scaffold-GS
+Level-of-Detail anchor model, `GaussianLoDModel`) — not vanilla 3DGS.**
+Per-scene 23k iterations; each scene trained three times from scratch:
+Octree-GS vanilla (`FASTGS=0 SKIPGS=0`), +FastGS (`FASTGS=1 SKIPGS=0`),
++FastGS+SkipGS (`FASTGS=1 SKIPGS=1`). FastGS + SkipGS keeps the pattern:
+**~-52% end-to-end training time vs. the Octree-GS baseline, with a small
+(<3%) per-scene quality delta on average** — a real speed/quality tradeoff,
+not a free win; some scenes do show fine-detail loss.
 
 <div align="center">
 
-<img src="docs/wriva_comparison.png" width="960" alt="WRIVA test-view renders: Ground Truth vs. 3DGS Vanilla vs. +FastGS vs. +FastGS+SkipGS on 4 representative scenes">
+<img src="docs/wriva_comparison.png" width="960" alt="WRIVA test-view renders: Ground Truth vs. Octree-GS Vanilla vs. +FastGS vs. +FastGS+SkipGS on 4 representative scenes">
 
 </div>
 
-Four representative held-out test views: GT (leftmost column) vs. the final render
-from each config trained from scratch. Scenes span outdoor architecture
+Four representative held-out test views: GT (leftmost column) vs. the final
+render from each config trained from scratch. Scenes span outdoor architecture
 (Cathedral), water/reflective surfaces (M09), PTZ camera geometry (TrailerPark),
-and injected artifacts (M07). Config-to-config visual differences are minor —
-the ~52% speedup does not degrade perceptual quality on WRIVA either.
+and injected artifacts (M07). See the [interactive project page](https://raw.githack.com/ASU-ESIC-FAN-Lab/SkipGS/gh-pages/index.html)
+for training timelapses (7 scenes) and pre-difix side-by-side renders.
 
 ## How it works
 
